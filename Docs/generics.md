@@ -1,4 +1,5 @@
 # Using .NET Generics in JavaScript
+
 The JavaScript runtime type system lacks generics, so .NET generic types and methods are projected
 into JavaScript using a special convention. The projections are suffixed with the dollar (`$`)
 character, chosen because it is a valid identifier charater in JavaScript but not in C#, and
@@ -34,6 +35,7 @@ normally, without any `$` suffix. If a type has multiple generic variants then t
 returns the requested type specialization according to the number of type arguments supplied.
 
 ## Getting a type full name
+
 Calling the `toString()` method on the JS projection of any generic type definition, specialized
 type, or non-generic type returns the full .NET type name. This may be helpful for diagnostics.
 
@@ -45,6 +47,7 @@ System.String.toString();                     // 'System.String'
 ```
 
 ## Static binding / AOT
+
 The above applies to [dynamic binding](./dynamic-invoke.md), when the `node-api-dotnet` library
 can use reflection to locate generic type and method definitions, specialize them, and invoke them.
 But some of that is impossible to do in an ahead-of-time compiled environment. Dynamically

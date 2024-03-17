@@ -49,7 +49,7 @@ public class NodejsEmbeddingTests
     [SkippableFact]
     public void NodejsRestart()
     {
-        // Create and destory a Node.js environment twice, using the same platform instance.
+        // Create and destroy a Node.js environment twice, using the same platform instance.
         NodejsStart();
         NodejsStart();
     }

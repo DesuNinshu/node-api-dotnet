@@ -41,7 +41,7 @@ public static class Program
         {
             Console.WriteLine("""
                 Usage: node-api-dotnet-generator [options...]
-                  -a --asssembly  Path to input assembly (required)
+                  -a --assembly  Path to input assembly (required)
                   -f --framework  Target framework of system assemblies (optional)
                   -p --pack       Targeting pack (optional, multiple)
                   -r --reference  Path to reference assembly (optional, multiple)

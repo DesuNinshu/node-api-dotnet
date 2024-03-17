@@ -22,7 +22,7 @@ internal static class ExpressionExtensions
     /// </summary>
     /// <remarks>
     /// This supports just enough expression types to handle generating C# code for lambda
-    /// expressions constructed by <see cref="Microsoft.JavaScript.NodeApi.DotNetHost.JSMarsaler" />.
+    /// expressions constructed by <see cref="Microsoft.JavaScript.NodeApi.DotNetHost.JSMarshaler" />.
     /// </remarks>
     /// <exception cref="NotImplementedException">Thrown if expression includes a node type
     /// for which C# conversion is not implemented.</exception>
@@ -56,8 +56,10 @@ internal static class ExpressionExtensions
             LambdaExpression lambda =>
                 // Format as either a method or a lambda depending on whether this node
                 // is inside a block (where variables have been defined).
-                (variables is null ? FormatType(lambda.ReturnType) + " " + lambda.Name + "(" +
-                  string.Join(", ", lambda.Parameters.Select((p) => p.ToCS())) + ")\n" :
+                (variables is null ?
+                FormatType(lambda.ReturnType) + " " + lambda.Name + "(" +
+                string.Join(", ", lambda.Parameters.Select((p) => p.ToCS())) + ")\n"
+                :
                 "(" + string.Join(", ", lambda.Parameters.Select((p) => p.ToCS())) + ") =>\n") +
                 ToCS(lambda.Body, path, (variables ?? Enumerable.Empty<string>())
                     .Union(lambda.Parameters.Select((p) => p.Name!)).ToHashSet()),
@@ -98,12 +100,13 @@ internal static class ExpressionExtensions
                 // If type is void then it's an if/then(/else), otherwise it's a ternary expression.
                 conditional.Type == typeof(void)
                     ? "if (" + ToCS(conditional.Test, path, variables) +
-                      ") { " + ToCS(conditional.IfTrue, path, variables) + "; }" +
-                      (conditional.IfFalse is DefaultExpression ? string.Empty :
-                      " else { " + ToCS(conditional.IfFalse, path, variables) + "; }")
+                        ") { " + ToCS(conditional.IfTrue, path, variables) + "; }" +
+                        (conditional.IfFalse is DefaultExpression
+                            ? string.Empty
+                            : " else { " + ToCS(conditional.IfFalse, path, variables) + "; }")
                     : ToCS(conditional.Test, path, variables) + " ?\n" +
-                      ToCS(conditional.IfTrue, path, variables) + " :\n" +
-                      ToCS(conditional.IfFalse, path, variables),
+                        ToCS(conditional.IfTrue, path, variables) + " :\n" +
+                        ToCS(conditional.IfFalse, path, variables),
 
             MemberExpression { NodeType: ExpressionType.MemberAccess } member =>
                 member.Expression is ParameterExpression parameterExpression &&
@@ -372,9 +375,9 @@ internal static class ExpressionExtensions
         string path,
         HashSet<string>? variables)
     {
-        string genericPrefix = (method.IsGenericMethod
+        string genericPrefix = method.IsGenericMethod
             ? "<" + string.Join(", ", method.GetGenericArguments().Select(FormatType)) + ">"
-            : string.Empty);
+            : string.Empty;
 
         ParameterInfo[] parameters = method.GetParameters();
         if (method.IsStatic && method.IsDefined(typeof(ExtensionAttribute), false))
